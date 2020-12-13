@@ -24,16 +24,15 @@ import {allow, and, deny, rule, shield} from "graphql-shield";
 import {prepare} from "../util";
 import {CheckPassword} from "wordpress-hash-node";
 import gql from 'graphql-tag';
-import {ApolloServer, makeExecutableSchema} from "apollo-server";
+import { makeExecutableSchema} from "apollo-server";
 import {applyMiddleware} from "graphql-middleware";
+import serverless from "serverless-http";
+import graphiql from "graphql-playground-middleware-express";
+import { ApolloServer } from "apollo-server-express";
 
 const app = express()
 
 app.use(cors())
-
-const homePath = '/graphiql'
-const URL = 'mongodb://localhost:27017/wp'
-const PORT = 3002
 
 const getBlogId = (request) => {
     const obj = gql`
@@ -48,142 +47,150 @@ const getBlogId = (request) => {
     } else return null;
 }
 
+const resolvers = {
+    Query: {
+        user,
+        users,
 
-export const start = async () => {
-    try {
-        const db = await MongoClient.connect(URL);
+        tag,
+        tags,
 
-        const resolvers = {
-            Query: {
-                user,
-                users,
+        taxonomy,
+        taxonomies,
 
-                tag,
-                tags,
+        category,
+        categories,
 
-                taxonomy,
-                taxonomies,
+        post,
+        posts,
+        postById,
+        postByParent,
+        postsAggregate,
+        postsAggregateById,
+        postType,
+        postContent,
+        blocksQuery,
+        purpleIssues,
+        blockId,
 
-                category,
-                categories,
+        advancedCustomField,
+        advancedCustomFields,
 
-                post,
-                posts,
-                postById,
-                postByParent,
-                postsAggregate,
-                postsAggregateById,
-                postType,
-                postContent,
-                blocksQuery,
-                purpleIssues,
-                blockId,
+        menusAggregate,
 
-                advancedCustomField,
-                advancedCustomFields,
+        revision,
+        revisions,
+    },
+}
 
-                menusAggregate,
+const isUserAuthenticated = async (request) => {
+    const blog_id = getBlogId(request);
+    const b64auth = (request.headers.authorization || '').split(' ')[1] || ''
+    const [login, password] = Buffer.from(b64auth, 'base64').toString().split(':')
+    if (login) {
+        const user = await getUserByName(blog_id, login);
+        return CheckPassword(password, user.password);
+    } else return false;
+}
 
-                revision,
-                revisions,
-            },
+const getUser = async (request) => {
+    const blog_id = getBlogId(request);
+    const b64auth = (request.headers.authorization || '').split(' ')[1] || ''
+    const [login, password] = Buffer.from(b64auth, 'base64').toString().split(':')
+    if (login) {
+        return await getUserByName(blog_id, login);
+    } else return null;
+}
+
+const URL = 'mongodb://localhost:27017'
+const client = new MongoClient(URL, { useNewUrlParser: true });
+
+const getDb = async () => {
+    if (!client.isConnected()) {
+        // Cold start or connection timed out. Create new connection.
+        try {
+            await client.connect();
+            return client.db('wp');
+        } catch (e) {
+            return e;
         }
-
-        const isUserAuthenticated = async (request, db) => {
-            const blog_id = getBlogId(request);
-            const b64auth = (request.headers.authorization || '').split(' ')[1] || ''
-            const [login, password] = Buffer.from(b64auth, 'base64').toString().split(':')
-            if (login) {
-                const user = await getUserByName(blog_id, login, db);
-                return CheckPassword(password, user.password);
-            } else return false;
-        }
-
-        const getUser = async (request, db) => {
-            const blog_id = getBlogId(request);
-            const b64auth = (request.headers.authorization || '').split(' ')[1] || ''
-            const [login, password] = Buffer.from(b64auth, 'base64').toString().split(':')
-            if (login) {
-                return await getUserByName(blog_id, login, db);
-            } else return null;
-        }
-
-        const getUserByName = async (blog_id, name, db) => {
-            const Users = db.collection(`users_${blog_id}`);
-            return prepare(await Users.findOne({'login': name}))
-        }
-
-        const isAuthenticated = rule({cache: 'contextual'})(
-            async (root, args, ctx) => {
-                return ctx.isUserAuthenticated;
-            },
-        )
-
-        const isAdmin = rule({cache: 'contextual'})(
-            async (parent, args, ctx, info) => {
-                const user = await ctx.user;
-                return user.roles.includes('administrator');
-            },
-        )
-
-        const permissions = shield({
-            Query: {
-                "*": deny,
-                posts: allow,
-                postsAggregateById: allow,
-                revision: and(isAuthenticated, isAdmin),
-                revisions: and(isAuthenticated, isAdmin),
-                user: and(isAuthenticated, isAdmin),
-                users: and(isAuthenticated, isAdmin),
-
-                tag: allow,
-                tags: allow,
-                taxonomy: isAuthenticated,
-                taxonomies: isAuthenticated,
-
-                category: allow,
-                categories: allow,
-
-                post: isAuthenticated,
-                postById: isAuthenticated,
-                postByParent: isAuthenticated,
-                postsAggregate: isAuthenticated,
-                postType: isAuthenticated,
-                postContent: isAuthenticated,
-                blocksQuery: isAuthenticated,
-                purpleIssues: isAuthenticated,
-                blockId: allow,
-
-                advancedCustomField: isAuthenticated,
-                advancedCustomFields: isAuthenticated,
-
-                menusAggregate: isAuthenticated,
-            },
-        }, {
-            debug: process.env.NODE_ENV !== "production"
-        })
-
-        const schema = applyMiddleware(
-            makeExecutableSchema({
-                typeDefs,
-                resolvers
-            }),
-            permissions
-        );
-
-        const server = new ApolloServer({
-            schema,
-            context: ({req}) => ({
-                db, isUserAuthenticated: isUserAuthenticated(req, db), user: getUser(req, db)
-            })
-        });
-
-
-        await server.listen(PORT, () => {
-            console.log(`Visit ${URL}:${PORT}${homePath}`)
-        })
-
-    } catch (e) {
-        console.log(e)
+    } else {
+        return client.db('wp');
     }
 }
+
+const getUserByName = async (blog_id, name) => {
+    const db = await getDb();
+    const Users = db.collection(`users_${blog_id}`);
+    return prepare(await Users.findOne({'login': name}))
+}
+
+const isAuthenticated = rule({cache: 'contextual'})(
+    async (root, args, ctx) => {
+        return ctx.isUserAuthenticated;
+    },
+)
+
+const isAdmin = rule({cache: 'contextual'})(
+    async (parent, args, ctx, info) => {
+        const user = await ctx.user;
+        return user.roles.includes('administrator');
+    },
+)
+
+const permissions = shield({
+    Query: {
+        "*": deny,
+        posts: allow,
+        postsAggregateById: allow,
+        revision: and(isAuthenticated, isAdmin),
+        revisions: and(isAuthenticated, isAdmin),
+        user: and(isAuthenticated, isAdmin),
+        users: and(isAuthenticated, isAdmin),
+
+        tag: allow,
+        tags: allow,
+        taxonomy: isAuthenticated,
+        taxonomies: isAuthenticated,
+
+        category: allow,
+        categories: allow,
+
+        post: isAuthenticated,
+        postById: isAuthenticated,
+        postByParent: isAuthenticated,
+        postsAggregate: isAuthenticated,
+        postType: isAuthenticated,
+        postContent: isAuthenticated,
+        blocksQuery: isAuthenticated,
+        purpleIssues: isAuthenticated,
+        blockId: allow,
+
+        advancedCustomField: isAuthenticated,
+        advancedCustomFields: isAuthenticated,
+
+        menusAggregate: isAuthenticated,
+    },
+}, {
+    debug: process.env.NODE_ENV !== "production"
+})
+
+const schema = applyMiddleware(
+    makeExecutableSchema({
+        typeDefs,
+        resolvers
+    }),
+    permissions
+);
+
+const server = new ApolloServer({
+    schema,
+    context: ({req}) => ({
+        isUserAuthenticated: isUserAuthenticated(req), user: getUser(req), db: getDb()
+    })
+});
+
+server.applyMiddleware({ app });
+app.get("/playground", graphiql({endpoint: "/graphql"}));
+const handler = serverless(app);
+export {handler};

@@ -2,7 +2,7 @@ import {prepare} from "../../util";
 import {ObjectId} from "mongodb";
 import {buildFilters} from "../Filters/filters";
 
-export const post = async (root, {_id, blog_id}, {db, isAuthenticated}) => {
+export const post = async (root, {_id, blog_id}, {isAuthenticated, db}) => {
     const Posts = db.collection(`posts_${blog_id}`);
     if (!isAuthenticated) {
         const post = await Posts.findOne({"_id": _id, "post_status": "publish"});
@@ -25,7 +25,7 @@ export const postByParent = async (root, {id, blog_id}, {db}) => {
 }
 
 export const posts = async (root, {blog_id, filter, first, skip}, ctx) => {
-    const Posts = ctx.db.collection(`posts_${blog_id}`);
+    const Posts = db.collection(`posts_${blog_id}`);
     let query = filter ? {$or: buildFilters(filter)} : {};
     const isAuthenticated = await ctx.isUserAuthenticated;
     if (!isAuthenticated) {
@@ -98,7 +98,7 @@ export const postsAggregate = async (root, {blog_id, first, skip}, {db}) => {
     return (issues.toArray());
 }
 
-export const postsAggregateById = async (parent, {id, blog_id}, {db, isUserAuthenticated}) => {
+export const postsAggregateById = async (parent, {id, blog_id}, {isUserAuthenticated, db}) => {
     const Posts = db.collection(`posts_${blog_id}`);
     const post = (await Posts.aggregate([
         {
@@ -217,7 +217,7 @@ export const purpleIssues = async (parent, {blog_id, first, skip}, {db}) => {
     return (issues.toArray());
 }
 
-export const blockId = async (parent, {id, blog_id}, {db, isUserAuthenticated}) => {
+export const blockId = async (parent, {id, blog_id}, {isUserAuthenticated, db}) => {
     const Posts = db.collection(`posts_${blog_id}`);
     const isAuthenticated = await isUserAuthenticated;
     if (!isAuthenticated) {
