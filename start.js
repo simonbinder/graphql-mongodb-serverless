@@ -117,6 +117,7 @@ const getDb = async () => {
             return e;
         }
     } else {
+        console.log("reuse connection");
         return client.db('wp');
     }
 }
@@ -198,3 +199,4 @@ server.applyMiddleware({ app });
 /*app.get("/playground", graphiql({endpoint: "/graphql"}));*/
 const handler = serverless(app);
 export {handler};
+
