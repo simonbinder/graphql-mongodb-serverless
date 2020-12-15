@@ -1,4 +1,5 @@
 service: serverless-graphql
+useDotenv: true
 plugins:
   - serverless-webpack
   - serverless-offline
