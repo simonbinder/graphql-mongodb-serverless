@@ -1,0 +1,13 @@
+image: node:latest
+
+stages:
+  - deploy
+
+production:
+  stage: deploy
+  before_script:
+    - chmod +x ./setup_env.sh
+    - ./setup_env.sh
+    - npm install
+  script:
+    - serverless deploy --verbose

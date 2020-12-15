@@ -2,28 +2,32 @@ service: serverless-graphql
 plugins:
   - serverless-webpack
   - serverless-offline
+  - serverless-plugin-include-dependencies
+
 custom:
   webpack:
-    webpackConfig: ./webpack.config.js
-    includeModules: true
-  serverless-offline:
-    noPrependStageInUrl: true
+    webpackConfig: webpack.config.js
+    includeModules:
+      forceExclude:
+        - graphql-playground-middleware-express
+
 provider:
   name: aws
-  runtime: nodejs8.10
+  runtime: nodejs12.x
   stage: dev
-  region: eu-west-1
+  region: eu-central-1
+
 functions:
-  graphql:
-    handler: ./src/start.handler
+  purpledshub-graphql:
+    handler: start.handler
     events:
       - http:
           path: graphql
           method: post
           cors: true
-  playground:
-    handler: ./src/start.handler
-    events:
-      - http:
-          path: playground
-          method: get
+ # playground:
+ #   handler: ./src/start.handler
+  #  events:
+  #    - http:
+   #       path: playground
+    #      method: get

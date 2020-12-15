@@ -2,7 +2,7 @@
   "name": "graphql-mongodb",
   "version": "0.1.0",
   "description": "",
-  "main": "src/start.js",
+  "main": "start.js",
   "scripts": {
     "startdev": "nodemon --exec babel-node src/index.js",
     "start": "node dist/index.js",
@@ -19,7 +19,9 @@
     "babel-plugin-transform-regenerator": "^6.20.0",
     "babel-preset-es2015": "^6.18.0",
     "graphql-playground-middleware-express": "^1.7.22",
-    "webpack": "^5.10.0",
+    "raw-loader": "^4.0.2",
+    "serverless-plugin-include-dependencies": "^4.1.0",
+    "webpack": "^5.10.1",
     "webpack-node-externals": "^2.5.2"
   },
   "dependencies": {
@@ -31,6 +33,7 @@
     "basic-auth": "^2.0.1",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-jwt": "^6.0.0",
     "graphql": "^15.4.0",

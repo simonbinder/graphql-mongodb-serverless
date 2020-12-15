@@ -1,10 +1,10 @@
 import {MongoClient} from 'mongodb'
 import express from 'express'
 import cors from 'cors'
-import {typeDefs} from './typedefs';
-import {user, users} from "./Collections/users";
-import {tag, tags, taxonomies, taxonomy} from "./Collections/tags";
-import {categories, category} from "./Collections/categories";
+import {typeDefs} from './src/typedefs';
+import {user, users} from "./src/Collections/users";
+import {tag, tags, taxonomies, taxonomy} from "./src/Collections/tags";
+import {categories, category} from "./src/Collections/categories";
 import {
     blockId,
     blocksQuery,
@@ -16,19 +16,21 @@ import {
     postsAggregate,
     postsAggregateById,
     postType, purpleIssues
-} from "./Collections/posts";
-import {menusAggregate} from "./Collections/menus";
-import {advancedCustomField, advancedCustomFields} from "./Collections/acf";
-import {revision, revisions} from "./Collections/revisions";
+} from "./src/Collections/posts";
+import {menusAggregate} from "./src/Collections/menus";
+import {advancedCustomField, advancedCustomFields} from "./src/Collections/acf";
+import {revision, revisions} from "./src/Collections/revisions";
 import {allow, and, deny, rule, shield} from "graphql-shield";
-import {prepare} from "../util";
+import {prepare} from "./util";
 import {CheckPassword} from "wordpress-hash-node";
 import gql from 'graphql-tag';
 import { makeExecutableSchema} from "apollo-server";
 import {applyMiddleware} from "graphql-middleware";
 import serverless from "serverless-http";
-import graphiql from "graphql-playground-middleware-express";
+/*import graphiql from "graphql-playground-middleware-express";*/
 import { ApolloServer } from "apollo-server-express";
+import caBundle from "./rds-combined-ca-bundle.pem";
+import * as context from "serverless";
 
 const app = express()
 
@@ -102,8 +104,8 @@ const getUser = async (request) => {
     } else return null;
 }
 
-const URL = 'mongodb://localhost:27017'
-const client = new MongoClient(URL, { useNewUrlParser: true });
+const URL = `mongodb://${process.env.DOCUMENTDB_USER}:${process.env.DOCUMENTDB_USER}@${process.env.DOCUMENTDB_URL}:27017`;
+const client = new MongoClient(URL, { useNewUrlParser: true, ssl: true, sslCA: caBundle });
 
 const getDb = async () => {
     if (!client.isConnected()) {
@@ -183,6 +185,8 @@ const schema = applyMiddleware(
     permissions
 );
 
+context.callbackWaitsForEmptyEventLoop = false;
+
 const server = new ApolloServer({
     schema,
     context: ({req}) => ({
@@ -191,6 +195,6 @@ const server = new ApolloServer({
 });
 
 server.applyMiddleware({ app });
-app.get("/playground", graphiql({endpoint: "/graphql"}));
+/*app.get("/playground", graphiql({endpoint: "/graphql"}));*/
 const handler = serverless(app);
 export {handler};

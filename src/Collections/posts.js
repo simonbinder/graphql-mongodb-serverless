@@ -3,7 +3,8 @@ import {ObjectId} from "mongodb";
 import {buildFilters} from "../Filters/filters";
 
 export const post = async (root, {_id, blog_id}, {isAuthenticated, db}) => {
-    const Posts = db.collection(`posts_${blog_id}`);
+    const database = await db;
+    const Posts = database.collection(`posts_${blog_id}`);
     if (!isAuthenticated) {
         const post = await Posts.findOne({"_id": _id, "post_status": "publish"});
         if (post) {
@@ -15,17 +16,20 @@ export const post = async (root, {_id, blog_id}, {isAuthenticated, db}) => {
 }
 
 export const postById = async (root, {id, blog_id}, {db}) => {
-    const Posts = db.collection(`posts_${blog_id}`);
+    const database = await db;
+    const Posts = database.collection(`posts_${blog_id}`);
     return prepare(await Posts.findOne({post_id: id}))
 }
 
 export const postByParent = async (root, {id, blog_id}, {db}) => {
-    const Posts = db.collection(`posts_${blog_id}`);
+    const database = await db;
+    const Posts = database.collection(`posts_${blog_id}`);
     return (await Posts.find({"post_parent": id}).toArray()).map(prepare);
 }
 
 export const posts = async (root, {blog_id, filter, first, skip}, ctx) => {
-    const Posts = db.collection(`posts_${blog_id}`);
+    const database = await ctx.db;
+    const Posts = database.collection(`posts_${blog_id}`);
     let query = filter ? {$or: buildFilters(filter)} : {};
     const isAuthenticated = await ctx.isUserAuthenticated;
     if (!isAuthenticated) {
@@ -42,7 +46,8 @@ export const posts = async (root, {blog_id, filter, first, skip}, ctx) => {
 }
 
 export const postsAggregate = async (root, {blog_id, first, skip}, {db}) => {
-    const Posts = db.collection(`posts_${blog_id}`);
+    const database = await db;
+    const Posts = database.collection(`posts_${blog_id}`);
     const issues = await Posts.aggregate([
         {
             $lookup: {
@@ -99,7 +104,8 @@ export const postsAggregate = async (root, {blog_id, first, skip}, {db}) => {
 }
 
 export const postsAggregateById = async (parent, {id, blog_id}, {isUserAuthenticated, db}) => {
-    const Posts = db.collection(`posts_${blog_id}`);
+    const database = await db;
+    const Posts = database.collection(`posts_${blog_id}`);
     const post = (await Posts.aggregate([
         {
             $match: {post_id: id}
@@ -158,19 +164,22 @@ export const postsAggregateById = async (parent, {id, blog_id}, {isUserAuthentic
 }
 
 export const postType = async (parent, {type, blog_id}, {db}) => {
-    const Posts = db.collection(`posts_${blog_id}`);
+    const database = await db;
+    const Posts = database.collection(`posts_${blog_id}`);
 
     return (await Posts.find({"post_type": type}).toArray()).map(prepare);
 }
 
 export const postContent = async (parent, {content, blog_id}, {db}) => {
-    const Posts = db.collection(`posts_${blog_id}`);
+    const database = await db;
+    const Posts = database.collection(`posts_${blog_id}`);
     return (await Posts.find({'$text': {'$search': `${content}`, '$caseSensitive': false}})
         .toArray()).map(prepare);
 }
 
 export const blocksQuery = async (parent, {blockName, blog_id}, {db}) => {
-    const Posts = db.collection(`posts_${blog_id}`);
+    const database = await db;
+    const Posts = database.collection(`posts_${blog_id}`);
     return (await Posts.aggregate([
             {$match: {"post_content.blockName": blockName}},
             {
@@ -195,7 +204,8 @@ export const blocksQuery = async (parent, {blockName, blog_id}, {db}) => {
 }
 
 export const purpleIssues = async (parent, {blog_id, first, skip}, {db}) => {
-    const Posts = db.collection(`posts_${blog_id}`);
+    const database = await db;
+    const Posts = database.collection(`posts_${blog_id}`);
     const issues = await Posts.aggregate([
         {
             $match: {post_type: "purple_issue"}
@@ -218,7 +228,8 @@ export const purpleIssues = async (parent, {blog_id, first, skip}, {db}) => {
 }
 
 export const blockId = async (parent, {id, blog_id}, {isUserAuthenticated, db}) => {
-    const Posts = db.collection(`posts_${blog_id}`);
+    const database = await db;
+    const Posts = database.collection(`posts_${blog_id}`);
     const isAuthenticated = await isUserAuthenticated;
     if (!isAuthenticated) {
         const post = await Posts.findOne({

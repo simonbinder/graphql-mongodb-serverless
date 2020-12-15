@@ -1,5 +1,6 @@
 export const menusAggregate = async (root, {first, skip, blog_id}, {db}) => {
-    const Menus = db.collection(`menus_${blog_id}`);
+    const database = await db;
+    const Menus = database.collection(`menus_${blog_id}`);
     const menus = await Menus.aggregate([
         {
             $lookup: {
