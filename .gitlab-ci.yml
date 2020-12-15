@@ -9,5 +9,6 @@ production:
     - chmod +x ./setup_env.sh
     - ./setup_env.sh
     - npm install
+    - npm install -g serverless
   script:
     - serverless deploy --verbose
