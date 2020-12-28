@@ -29,6 +29,7 @@ functions:
           path: graphql
           method: post
           cors: true
+          integration: lambda # you must use lambda integration (instead of the default proxy integration) for this to work
           caching:
             enabled: true
             cacheKeyParameters:
