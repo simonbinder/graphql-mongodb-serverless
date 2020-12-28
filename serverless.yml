@@ -29,23 +29,11 @@ functions:
           path: graphql
           method: post
           cors: true
-          integration: lambda # you must use lambda integration (instead of the default proxy integration) for this to work
-          request:
-            template:
-              text/xhtml: '{ "stage" : "$context.stage" }'
-              application/json: '{ "httpMethod" : "$context.httpMethod" }'
-          response:
-            statusCodes:
-              200:
-                pattern: ''
-              400:
-                pattern: '.*"error".*'
-                template: $input.path('$.errorMessage')
+          integration: lambda-proxy # you must use lambda integration (instead of the default proxy integration) for this to work
           caching:
             enabled: true
             cacheKeyParameters:
-              - name: integration.request.header.bodyValue
-                mappedFrom: method.request.body
+              - name: method.request.body
 #  playground:
  #   handler: start.handler
   #  events:
