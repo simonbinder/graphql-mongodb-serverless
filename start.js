@@ -26,7 +26,6 @@ import gql from 'graphql-tag';
 import { makeExecutableSchema} from "apollo-server";
 import {applyMiddleware} from "graphql-middleware";
 import serverless from "serverless-http";
-/*import graphiql from "graphql-playground-middleware-express";*/
 import { ApolloServer } from "apollo-server-express";
 import caBundle from "./rds-combined-ca-bundle.pem";
 import * as context from "serverless";
@@ -186,15 +185,15 @@ const schema = applyMiddleware(
 context.callbackWaitsForEmptyEventLoop = false;
 
 const server = new ApolloServer({
+    introspection: true,
+    playground: true,
     schema,
-    playground: false,
     context: ({req}) => ({
         isUserAuthenticated: isUserAuthenticated(req), user: getUser(req), db: getDb()
     })
 });
 
 server.applyMiddleware({ app });
-/*app.get("/playground", graphiql({endpoint: "/graphql"}));*/
 const handler = serverless(app);
 export {handler};
 
