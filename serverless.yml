@@ -4,6 +4,7 @@ plugins:
   - serverless-webpack
   - serverless-offline
   - serverless-plugin-include-dependencies
+  - serverless-api-gateway-caching
 
 custom:
   webpack:
