@@ -11,6 +11,8 @@ custom:
     includeModules:
       forceExclude:
         - graphql-playground-middleware-express
+  apiGatewayCaching:
+    enabled: true
 
 provider:
   name: aws
@@ -26,6 +28,12 @@ functions:
           path: graphql
           method: post
           cors: true
+          integration: lambda # you must use lambda integration (instead of the default proxy integration) for this to work
+          caching:
+            enabled: true
+            cacheKeyParameters:
+              - name: integration.request.header.bodyValue
+                mappedFrom: method.request.body
  # playground:
  #   handler: ./src/start.handler
   #  events:

@@ -44,6 +44,7 @@
     "node-sass": "^5.0.0",
     "nodemon": "^1.19.4",
     "serverless": "^2.15.0",
+    "serverless-api-gateway-caching": "^1.6.0",
     "serverless-http": "^2.6.0",
     "serverless-offline": "^6.8.0",
     "serverless-webpack": "^5.3.5",
