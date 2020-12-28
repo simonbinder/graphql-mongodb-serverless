@@ -185,8 +185,6 @@ const schema = applyMiddleware(
 context.callbackWaitsForEmptyEventLoop = false;
 
 const server = new ApolloServer({
-    introspection: true,
-    playground: true,
     schema,
     context: ({req}) => ({
         isUserAuthenticated: isUserAuthenticated(req), user: getUser(req), db: getDb()
