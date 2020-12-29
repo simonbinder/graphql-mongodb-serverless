@@ -26,15 +26,9 @@ functions:
           path: graphql
           method: post
           cors: true
-#  playground:
- #   handler: start.handler
+ # playground:
+ #   handler: ./src/start.handler
   #  events:
-   #   - http:
-    #      path: graphql
-     #     method: get
-       #   cors: true
-      #    caching:
-        #    enabled: true
-         #   cacheKeyParameters:
-          #    - name: integration.request.header.bodyValue
-           #     mappedFrom: method.request.body
+  #    - http:
+   #       path: playground
+    #      method: get
