@@ -34,6 +34,7 @@ const app = express()
 app.use(cors())
 
 const getBlogId = (request) => {
+    console.log(request)
     const obj = gql`
               ${request.body.query}
             `;
