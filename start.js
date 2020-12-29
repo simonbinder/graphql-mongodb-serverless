@@ -23,13 +23,13 @@ import {revision, revisions} from "./src/Collections/revisions";
 import {allow, and, deny, rule, shield} from "graphql-shield";
 import {prepare} from "./util";
 import {CheckPassword} from "wordpress-hash-node";
+import gql from 'graphql-tag';
 import { makeExecutableSchema} from "apollo-server";
 import {applyMiddleware} from "graphql-middleware";
 import serverless from "serverless-http";
 import { ApolloServer } from "apollo-server-express";
 import caBundle from "./rds-combined-ca-bundle.pem";
 import * as context from "serverless";
-import gql from "graphql-tag/lib/graphql-tag.umd";
 
 const app = express()
 app.use(cors())

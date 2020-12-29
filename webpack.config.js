@@ -18,7 +18,7 @@ module.exports = {
     },
     devtool: 'source-map',
     resolve: {
-        extensions: [ '.js', '.jsx', '.json', '.ts', '.tsx' ]
+        extensions: ['.js', '.jsx', '.json', '.ts', '.tsx']
     },
     externals: [nodeExternals()],
     module: {
@@ -35,6 +35,11 @@ module.exports = {
             {
                 test: /\.pem$/i,
                 use: 'raw-loader',
+            },
+            {
+                test: /\.(graphql|gql)$/,
+                exclude: /node_modules/,
+                loader: 'graphql-tag/loader',
             },
         ]
     },
