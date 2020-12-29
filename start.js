@@ -193,6 +193,10 @@ const server = new ApolloServer({
     })
 });
 
+app.get('/',(req,res)=>{
+    console.log(req);
+});
+
 server.applyMiddleware({ app });
 const handler = serverless(app);
 export {handler};
