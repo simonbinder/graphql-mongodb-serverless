@@ -4,6 +4,7 @@ import {typeDefs} from './src/typedefs';
 import {user, users} from "./src/Collections/users";
 import {tag, tags, taxonomies, taxonomy} from "./src/Collections/tags";
 import {categories, category} from "./src/Collections/categories";
+import cors from 'cors'
 import {
     blockId,
     blocksQuery,
@@ -31,6 +32,7 @@ import caBundle from "./rds-combined-ca-bundle.pem";
 import * as context from "serverless";
 
 const app = express()
+app.use(cors())
 
 const getBlogId = (request) => {
     const obj = gql`
