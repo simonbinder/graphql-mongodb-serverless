@@ -34,7 +34,6 @@ const app = express()
 app.use(cors())
 
 const getBlogId = (request) => {
-    console.log(request.body)
     const obj = gql`
               ${request.body.query}
             `;
@@ -85,10 +84,13 @@ const resolvers = {
 
 const isUserAuthenticated = async (request) => {
     const blog_id = getBlogId(request);
+    console.log(blog_id);
     const b64auth = (request.headers.authorization || '').split(' ')[1] || ''
     const [login, password] = Buffer.from(b64auth, 'base64').toString().split(':')
+    console.log(login);
     if (login) {
         const user = await getUserByName(blog_id, login);
+        console.log(user);
         return CheckPassword(password, user.password);
     } else return false;
 }
@@ -103,7 +105,7 @@ const getUser = async (request) => {
 }
 
 const URL = `mongodb://${process.env.DOCUMENTDB_USER}:${process.env.DOCUMENTDB_PASSWORD}@${process.env.DOCUMENTDB_URL}:27017`;
-const client = new MongoClient(URL, { useNewUrlParser: true, ssl: true, sslCA: caBundle });
+const client = new MongoClient(URL, { useNewUrlParser: true, ssl: true, sslCA: caBundle, useUnifiedTopology: true });
 
 const getDb = async () => {
     if (!client.isConnected()) {
