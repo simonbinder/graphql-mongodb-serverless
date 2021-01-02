@@ -158,7 +158,6 @@ export const postsAggregateById = async (parent, {id, blog_id}, {isUserAuthentic
         },
     ]).toArray()).map(prepare)[0];
     const isAuthenticated = await isUserAuthenticated;
-    console.log(post);
     if (!isAuthenticated && post.post_status !== "publish") {
         throw new Error('Unauthorised!');
     } else return post;

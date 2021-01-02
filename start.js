@@ -84,13 +84,10 @@ const resolvers = {
 
 const isUserAuthenticated = async (request) => {
     const blog_id = getBlogId(request);
-    console.log(blog_id);
     const b64auth = (request.headers.authorization || '').split(' ')[1] || ''
     const [login, password] = Buffer.from(b64auth, 'base64').toString().split(':')
-    console.log(login);
     if (login) {
         const user = await getUserByName(blog_id, login);
-        console.log(user);
         return CheckPassword(password, user.password);
     } else return false;
 }
@@ -130,6 +127,7 @@ const getUserByName = async (blog_id, name) => {
 
 const isAuthenticated = rule({cache: 'contextual'})(
     async (root, args, ctx) => {
+        await ctx.isUserAuthenticated;
         return ctx.isUserAuthenticated;
     },
 )
