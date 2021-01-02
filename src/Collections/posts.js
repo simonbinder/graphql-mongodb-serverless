@@ -100,7 +100,7 @@ export const postsAggregate = async (root, {blog_id, first, skip}, {db}) => {
     if (skip) {
         issues.skip(skip);
     }
-    return (issues.toArray());
+    return (issues.toArray()).map(prepare);
 }
 
 export const postsAggregateById = async (parent, {id, blog_id}, {isUserAuthenticated, db}) => {
