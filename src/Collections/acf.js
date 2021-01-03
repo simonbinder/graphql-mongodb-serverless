@@ -12,12 +12,6 @@ export const advancedCustomFields = async (root, {blog_id, filter, first, skip},
     const database = await db;
     const AdvancedCustomFields = database.collection(`advanced_custom_fields_${blog_id}`);
     let query = filter ? {$or: buildAdvancedCustomFieldsFilter(filter)} : {};
-    const acfs = await AdvancedCustomFields.find(query);
-    if (first) {
-        acfs.limit(first);
-    }
-    if (skip) {
-        acfs.skip(skip);
-    }
+    const acfs = await AdvancedCustomFields.find(query).limit(first).skip(skip);
     return (acfs.toArray());
 }

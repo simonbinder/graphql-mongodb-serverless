@@ -12,12 +12,6 @@ export const categories = async (root, {filter, first, skip, blog_id}, {db}) => 
     const database = await db;
     const Categories = database.collection(`taxonomies_${blog_id}`);
     let query = filter ? {$or: buildCategoryFilters(filter)} : {};
-    const tags = await Categories.find(query);
-    if (first) {
-        tags.limit(first);
-    }
-    if (skip) {
-        tags.skip(skip);
-    }
+    const tags = await Categories.find(query).limit(first).skip(skip);
     return (tags.toArray());
 }

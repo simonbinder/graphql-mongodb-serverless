@@ -87,13 +87,7 @@ export const postsAggregate = async (root, {blog_id, first, skip}, {db}) => {
             }
         }, {
             $unwind: '$user'
-        }]);
-    if (first) {
-        issues.limit(first);
-    }
-    if (skip) {
-        issues.skip(skip);
-    }
+        }]).limit(first).skip(skip);
     return (issues.toArray());
 }
 
@@ -160,7 +154,6 @@ export const postsAggregateById = async (parent, {id, blog_id}, {isUserAuthentic
 export const postType = async (parent, {type, blog_id}, {db}) => {
     const database = await db;
     const Posts = database.collection(`posts_${blog_id}`);
-
     return (await Posts.find({"post_type": type}).toArray()).map(prepare);
 }
 
@@ -211,13 +204,7 @@ export const purpleIssues = async (parent, {blog_id, first, skip}, {db}) => {
                 foreignField: 'post_id',
                 as: 'issue_posts'
             }
-        }]);
-    if (first) {
-        issues.limit(first);
-    }
-    if (skip) {
-        issues.skip(skip);
-    }
+        }]).limit(first).skip(skip);
     return (issues.toArray());
 }
 

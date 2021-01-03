@@ -17,13 +17,7 @@ export const tags = async (root, {filter, first, skip, blog_id}, {db}) => {
     } else {
         Object.assign(query['$or'][0], {taxonomy: {$regex: `.*post_tag.*`}});
     }
-    const tags = await Tags.find(query);
-    if (first) {
-        tags.limit(first);
-    }
-    if (skip) {
-        tags.skip(skip);
-    }
+    const tags = await Tags.find(query).limit(first).skip(skip);
     return (tags.toArray());
 }
 
@@ -37,13 +31,7 @@ export const taxonomies = async (root, {filter, first, skip, blog_id}, {db}) => 
     const database = await db;
     const Taxonomies = database.collection(`taxonomies_${blog_id}`);
     let query = filter ? {$or: buildTagFilters(filter)} : {};
-    const taxonomies = await Taxonomies.find(query);
-    if (first) {
-        taxonomies.limit(first);
-    }
-    if (skip) {
-        taxonomies.skip(skip);
-    }
+    const taxonomies = await Taxonomies.find(query).limit(first).skip(skip);
     return (taxonomies.toArray());
 }
 
