@@ -35,13 +35,7 @@ export const posts = async (root, {blog_id, filter, first, skip}, ctx) => {
     if (!isAuthenticated) {
         Object.assign(query['$or'][0], {post_status: {$regex: `.*publish.*`}});
     }
-    const posts = await Posts.find(query);
-    if (first) {
-        posts.limit(first);
-    }
-    if (skip) {
-        posts.skip(skip);
-    }
+    const posts = await Posts.find(query).limit(first).skip(skip);
     return (posts.toArray());
 }
 
