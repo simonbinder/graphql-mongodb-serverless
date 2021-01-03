@@ -82,14 +82,14 @@ export const postsAggregate = async (root, {blog_id, first, skip}, {db}) => {
                 from: `comments_${blog_id}`,
                 localField: 'comments',
                 foreignField: 'comment_id',
-                as: 'tags'
+                as: 'comment_fields'
             }
         }, {
             $lookup: {
                 from: `advanced_custom_fields_${blog_id}`,
                 localField: 'advanced_custom_fields.fieldId',
                 foreignField: 'ID',
-                as: 'advanced_custom_fields.field'
+                as: 'advancedCustomFields'
             }
         }, {
             $unwind: '$user'
