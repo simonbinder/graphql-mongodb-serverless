@@ -122,7 +122,9 @@ const getDb = async () => {
 const getUserByName = async (blog_id, name) => {
     const db = await getDb();
     const Users = db.collection(`users_${blog_id}`);
-    return prepare(await Users.findOne({'login': name}))
+    const user = await Users.findOne({'login': name});
+    console.log(user);
+    return prepare(user);
 }
 
 const isAuthenticated = rule({cache: 'contextual'})(
