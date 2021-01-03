@@ -15,7 +15,8 @@ import {
     posts,
     postsAggregate,
     postsAggregateById,
-    postType, purpleIssues
+    postType,
+    purpleIssues
 } from "./src/Collections/posts";
 import {menusAggregate} from "./src/Collections/menus";
 import {advancedCustomField, advancedCustomFields} from "./src/Collections/acf";
@@ -23,12 +24,11 @@ import {revision, revisions} from "./src/Collections/revisions";
 import {allow, and, deny, rule, shield} from "graphql-shield";
 import {prepare} from "./util";
 import {CheckPassword} from "wordpress-hash-node";
-import { makeExecutableSchema, gql } from "apollo-server";
+import {gql, makeExecutableSchema} from "apollo-server";
 import {applyMiddleware} from "graphql-middleware";
 import serverless from "serverless-http";
-import { ApolloServer } from "apollo-server-express";
+import {ApolloServer} from "apollo-server-express";
 import caBundle from "./rds-combined-ca-bundle.pem";
-import * as context from "serverless";
 
 const app = express()
 app.use(cors())
@@ -184,7 +184,6 @@ const schema = applyMiddleware(
     permissions
 );
 
-context.callbackWaitsForEmptyEventLoop = false;
 
 const server = new ApolloServer({
     schema,
@@ -195,5 +194,9 @@ const server = new ApolloServer({
 
 server.applyMiddleware({app, path: "/"});
 const handler = serverless(app);
-export {handler};
 
+module.exports.handler = async (event, context) => {
+    context.callbackWaitsForEmptyEventLoop = false;
+    // you can do other things here
+    return await handler(event, context);
+};
