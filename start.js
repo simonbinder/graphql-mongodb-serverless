@@ -122,9 +122,7 @@ const getDb = async () => {
 const getUserByName = async (blog_id, name) => {
     const db = await getDb();
     const Users = db.collection(`users_${blog_id}`);
-    const user = await Users.findOne({'login': name});
-    console.log(user);
-    return prepare(user);
+    return prepare(await Users.findOne({'login': name}))
 }
 
 const isAuthenticated = rule({cache: 'contextual'})(
@@ -175,7 +173,7 @@ const permissions = shield({
         menusAggregate: isAuthenticated,
     },
 }, {
-    debug: process.env.NODE_ENV !== "production"
+    debug: true
 })
 
 const schema = applyMiddleware(
