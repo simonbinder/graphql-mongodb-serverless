@@ -92,7 +92,13 @@ export const postsAggregate = async (root, {blog_id, first, skip}, {db}) => {
             }
         }, {
             $unwind: '$user'
-        }]).limit(first).skip(skip);
+        }]);
+    if (first) {
+        issues.limit(first);
+    }
+    if (skip) {
+        issues.skip(skip);
+    }
     return (issues.toArray());
 }
 
@@ -209,7 +215,13 @@ export const purpleIssues = async (parent, {blog_id, first, skip}, {db}) => {
                 foreignField: 'post_id',
                 as: 'issue_posts'
             }
-        }]).limit(first).skip(skip);
+        }])
+    if (first) {
+        issues.limit(first);
+    }
+    if (skip) {
+        issues.skip(skip);
+    }
     return (issues.toArray());
 }
 
