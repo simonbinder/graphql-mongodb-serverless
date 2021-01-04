@@ -40,7 +40,8 @@ export const posts = async (root, {blog_id, filter, first, skip}, ctx, info) => 
     if(skip) {
         posts.skip(skip);
     }
-    return posts;
+    const postsArray = posts.toArray();
+    return postsArray;
 }
 
 export const postsAggregate = async (root, {blog_id, first, skip}, {db}) => {
