@@ -4,6 +4,7 @@ plugins:
   - serverless-webpack
   - serverless-offline
   - serverless-plugin-include-dependencies
+  - serverless-api-gateway-caching
 
 custom:
   webpack:
@@ -25,6 +26,12 @@ functions:
           path: graphql
           method: post
           cors: true
+          integration: lambda-proxy # you must use lambda integration (instead of the default proxy integration) for this to work
+          caching:
+            enabled: true
+            cacheKeyParameters:
+              - name: integration.request.header.bodyValue
+                mappedFrom: method.request.body
  # playground:
  #   handler: ./src/start.handler
   #  events:
