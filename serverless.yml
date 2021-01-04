@@ -31,7 +31,8 @@ functions:
           caching:
             enabled: true
             cacheKeyParameters:
-              - name: method.request.body
+              - name: integration.request.header.bodyValue
+                mappedFrom: method.request.body
  # playground:
  #   handler: ./src/start.handler
   #  events:
