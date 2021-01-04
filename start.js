@@ -30,7 +30,6 @@ import { ApolloServer } from "apollo-server-express";
 import caBundle from "./rds-combined-ca-bundle.pem";
 import * as context from "serverless";
 import deflate from "graphql-deduplicator/dist/deflate";
-import {GraphQLExtension} from "graphql-extensions";
 
 const app = express()
 app.use(cors())
@@ -192,6 +191,7 @@ class DeduplicateResponseExtension extends GraphQLExtension {
     willSendResponse(o) {
         const { context, graphqlResponse } = o
         const data = deflate(graphqlResponse.data)
+        console.log(data);
         return {
             ...o,
             graphqlResponse: {
