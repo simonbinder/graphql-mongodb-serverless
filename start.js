@@ -29,7 +29,6 @@ import serverless from "serverless-http";
 import { ApolloServer } from "apollo-server-express";
 import caBundle from "./rds-combined-ca-bundle.pem";
 import * as context from "serverless";
-import { crunch } from 'graphql-crunch';
 
 const app = express()
 app.use(cors())
@@ -191,13 +190,7 @@ const server = new ApolloServer({
     schema,
     context: ({req}) => ({
         isUserAuthenticated: isUserAuthenticated(req), user: getUser(req), db: getDb()
-    }),
-    formatResponse: (response) => {
-        if(response.data) {
-            response.data = crunch(response.data);
-        }
-        return response;
-    },
+    })
 });
 
 server.applyMiddleware({app, path: "/"});
