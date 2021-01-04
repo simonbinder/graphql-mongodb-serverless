@@ -190,20 +190,14 @@ context.callbackWaitsForEmptyEventLoop = false;
 class DeduplicateResponseExtension extends GraphQLExtension {
     willSendResponse(o) {
         const { context, graphqlResponse } = o
-        console.log(context.req);
-        // Ensures `?deduplicate=1` is used in the request
-        if (context.req.query.deduplicate && graphqlResponse.data && !graphqlResponse.data.__schema) {
-            const data = deflate(graphqlResponse.data)
-            return {
-                ...o,
-                graphqlResponse: {
-                    ...graphqlResponse,
-                    data,
-                },
-            }
+        const data = deflate(graphqlResponse.data)
+        return {
+            ...o,
+            graphqlResponse: {
+                ...graphqlResponse,
+                data,
+            },
         }
-
-        return o
     }
 }
 
