@@ -29,10 +29,7 @@ import serverless from "serverless-http";
 import { ApolloServer } from "apollo-server-express";
 import caBundle from "./rds-combined-ca-bundle.pem";
 import * as context from "serverless";
-import {
-    deflate
-} from 'graphql-deduplicator';
-import {GraphQLExtension} from "graphql-extensions";
+import { crunch } from 'graphql-crunch';
 
 const app = express()
 app.use(cors())
@@ -190,31 +187,17 @@ const schema = applyMiddleware(
 
 context.callbackWaitsForEmptyEventLoop = false;
 
-class DeduplicateResponseExtension extends GraphQLExtension {
-    willSendResponse(o) {
-        const { context, graphqlResponse } = o
-        // Ensures `?deduplicate=1` is used in the request
-        if (context.req.query.deduplicate && graphqlResponse.data && !graphqlResponse.data.__schema) {
-            const data = deflate(graphqlResponse.data)
-            return {
-                ...o,
-                graphqlResponse: {
-                    ...graphqlResponse,
-                    data,
-                },
-            }
-        }
-
-        return o
-    }
-}
-
 const server = new ApolloServer({
     schema,
     context: ({req}) => ({
         isUserAuthenticated: isUserAuthenticated(req), user: getUser(req), db: getDb()
     }),
-    extensions: [() => new DeduplicateResponseExtension()],
+    formatResponse: (response) => {
+        if(response.data) {
+            response.data = crunch(response.data);
+        }
+        return response;
+    },
 });
 
 server.applyMiddleware({app, path: "/"});
