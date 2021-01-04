@@ -30,6 +30,12 @@ export const menusAggregate = async (root, {first, skip, blog_id}, {db}) => {
                     'slug': {$first: '$slug'},
                 }
         },
-    ]).limit(first).skip(skip);
+    ]);
+    if (first) {
+        menus.limit(first);
+    }
+    if (skip) {
+        menus.skip(skip);
+    }
     return ((await menus.toArray()));
 }
