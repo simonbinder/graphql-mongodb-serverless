@@ -29,6 +29,7 @@ import serverless from "serverless-http";
 import { ApolloServer } from "apollo-server-express";
 import caBundle from "./rds-combined-ca-bundle.pem";
 import * as context from "serverless";
+import deflate from "graphql-deduplicator/dist/deflate";
 
 const app = express()
 app.use(cors())
