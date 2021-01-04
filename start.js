@@ -32,6 +32,7 @@ import caBundle from "./rds-combined-ca-bundle.pem";
 import * as context from "serverless";
 import deflate from "graphql-deduplicator/dist/deflate";
 import {GraphQLExtension} from "graphql-extensions";
+import responseCachePlugin from 'apollo-server-plugin-response-cache';
 
 const app = express()
 app.use(cors())
@@ -209,6 +210,7 @@ const server = new ApolloServer({
     context: ({req}) => ({
         isUserAuthenticated: isUserAuthenticated(req), user: getUser(req), db: getDb()
     }),
+    plugins: [responseCachePlugin()],
     extensions: [() => new DeduplicateResponseExtension()],
 });
 

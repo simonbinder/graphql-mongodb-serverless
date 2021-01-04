@@ -27,7 +27,8 @@ export const postByParent = async (root, {id, blog_id}, {db}) => {
     return (await Posts.find({"post_parent": id}).toArray()).map(prepare);
 }
 
-export const posts = async (root, {blog_id, filter, first, skip}, ctx) => {
+export const posts = async (root, {blog_id, filter, first, skip, info}, ctx) => {
+    info.cacheControl.setCacheHint({ maxAge: 10 });
     const database = await ctx.db;
     const Posts = database.collection(`posts_${blog_id}`);
     let query = filter ? {$or: buildFilters(filter)} : {};
