@@ -5,6 +5,7 @@ import {user, users} from "./src/Collections/users";
 import {tag, tags, taxonomies, taxonomy} from "./src/Collections/tags";
 import {categories, category} from "./src/Collections/categories";
 import cors from 'cors'
+import compression from "compression";
 import {
     blockId,
     blocksQuery,
@@ -34,6 +35,7 @@ import {GraphQLExtension} from "graphql-extensions";
 
 const app = express()
 app.use(cors())
+app.use(compression())
 
 const getBlogId = (request) => {
     const obj = gql`
@@ -192,7 +194,6 @@ class DeduplicateResponseExtension extends GraphQLExtension {
     willSendResponse(o) {
         const { context, graphqlResponse } = o
         const data = deflate(graphqlResponse.data)
-        console.log(data);
         return {
             ...o,
             graphqlResponse: {
