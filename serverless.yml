@@ -12,6 +12,8 @@ custom:
     includeModules:
       forceExclude:
         - graphql-playground-middleware-express
+    apiGatewayCaching:
+      enabled: true
 
 provider:
   name: aws
