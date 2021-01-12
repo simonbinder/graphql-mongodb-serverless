@@ -27,9 +27,11 @@ export const typeDefs = `
       }
       
       input PostFilter {
-          OR: [PostFilter!]
+          AND: [PostFilter!]
           title_contains: String
           post_type_contains: String
+          date_start: String
+          date_end: String
           post_content_contains: String
         }
         

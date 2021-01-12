@@ -1,5 +1,5 @@
-export function buildFilters({OR = [], title_contains, post_type_contains, post_content_contains}) {
-    const filter = (title_contains || post_type_contains || post_content_contains) ? {} : null;
+export function buildFilters({AND = [], title_contains, post_type_contains, post_content_contains, date_start, date_end}) {
+    const filter = (title_contains || post_type_contains || post_content_contains || date_start || date_end) ? {} : null;
     if (title_contains) {
         filter.post_title = {$regex: `.*${title_contains}.*`};
     }
@@ -11,9 +11,24 @@ export function buildFilters({OR = [], title_contains, post_type_contains, post_
         filter['post_content.attrs.content'] = {$regex: new RegExp(`.*${post_content_contains}.*`, 'i')};
     }
 
+    if (date_start && date_end) {
+        filter.post_modified = {
+            $gte: date_start,
+            $lte: date_end
+        }
+    } else if (date_start) {
+        filter.post_modified = {
+            $gte: date_start
+        }
+    } else if (date_end) {
+        filter.post_modified = {
+            $lte: date_end
+        }
+    }
+
     let filters = filter ? [filter] : [];
-    for (let i = 0; i < OR.length; i++) {
-        filters = filters.concat(buildFilters(OR[i]));
+    for (let i = 0; i < AND.length; i++) {
+        filters = filters.concat(buildFilters(AND[i]));
     }
     return filters;
 }

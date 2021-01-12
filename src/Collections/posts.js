@@ -31,7 +31,7 @@ export const posts = async (root, {filter, first, skip}, ctx, info) => {
     info.cacheControl.setCacheHint({ maxAge: 10 });
     const database = await ctx.db;
     const Posts = database.collection(`posts`);
-    let query = filter ? {$or: buildFilters(filter)} : {};
+    let query = filter ? {$and: buildFilters(filter)} : {};
     const isAuthenticated = await ctx.isUserAuthenticated;
     if (!isAuthenticated) {
         Object.assign(query['$or'][0], {post_status: {$regex: `.*publish.*`}});
