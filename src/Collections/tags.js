@@ -2,15 +2,15 @@ import {prepare} from "../../util";
 import {ObjectId} from "mongodb";
 import {buildTagFilters} from "../Filters/filters";
 
-export const tag = async (root, {_id, blog_id}, {db}) => {
+export const tag = async (root, {_id}, {db}) => {
     const database = await db;
-    const Tags = database.collection(`taxonomies_${blog_id}`);
+    const Tags = database.collection(`taxonomies`);
     return prepare(await Tags.findOne(ObjectId(_id)))
 }
 
-export const tags = async (root, {filter, first, skip, blog_id}, {db}) => {
+export const tags = async (root, {filter, first, skip}, {db}) => {
     const database = await db;
-    const Tags = database.collection(`taxonomies_${blog_id}`);
+    const Tags = database.collection(`taxonomies`);
     let query = filter ? {$or: buildTagFilters(filter)} : {};
     if(Object.keys(query).length === 0 && query.constructor === Object) {
         query = {taxonomy: "post_tag"};
@@ -27,15 +27,15 @@ export const tags = async (root, {filter, first, skip, blog_id}, {db}) => {
     return (tags.toArray());
 }
 
-export const taxonomy = async (root, {_id, blog_id}, {db}) => {
+export const taxonomy = async (root, {_id}, {db}) => {
     const database = await db;
-    const Taxonomies = database.collection(`taxonomies_${blog_id}`);
+    const Taxonomies = database.collection(`taxonomies`);
     return prepare(await Taxonomies.findOne(ObjectId(_id)));
 }
 
-export const taxonomies = async (root, {filter, first, skip, blog_id}, {db}) => {
+export const taxonomies = async (root, {filter, first, skip}, {db}) => {
     const database = await db;
-    const Taxonomies = database.collection(`taxonomies_${blog_id}`);
+    const Taxonomies = database.collection(`taxonomies`);
     let query = filter ? {$or: buildTagFilters(filter)} : {};
     const taxonomies = await Taxonomies.find(query);
     if (first) {

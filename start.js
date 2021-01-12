@@ -88,26 +88,27 @@ const resolvers = {
 }
 
 const isUserAuthenticated = async (request) => {
-    const blog_id = getBlogId(request);
     const b64auth = (request.headers.authorization || '').split(' ')[1] || ''
     const [login, password] = Buffer.from(b64auth, 'base64').toString().split(':')
     if (login) {
-        const user = await getUserByName(blog_id, login);
+        const user = await getUserByName(login);
         return CheckPassword(password, user.password);
     } else return false;
 }
 
 const getUser = async (request) => {
-    const blog_id = getBlogId(request);
     const b64auth = (request.headers.authorization || '').split(' ')[1] || ''
     const [login, password] = Buffer.from(b64auth, 'base64').toString().split(':')
     if (login) {
-        return await getUserByName(blog_id, login);
+        return await getUserByName(login);
     } else return null;
 }
 
 const URL = `mongodb://${process.env.DOCUMENTDB_USER}:${process.env.DOCUMENTDB_PASSWORD}@${process.env.DOCUMENTDB_URL}:27017`;
+const localURL = 'mongodb://localhost:27017';
 const client = new MongoClient(URL, { useNewUrlParser: true, ssl: true, sslCA: caBundle, useUnifiedTopology: true });
+
+/*const client = new MongoClient(localURL);*/
 
 const getDb = async () => {
     if (!client.isConnected()) {
@@ -124,10 +125,10 @@ const getDb = async () => {
     }
 }
 
-const getUserByName = async (blog_id, name) => {
+const getUserByName = async (name) => {
     const db = await getDb();
-    const Users = db.collection(`users_${blog_id}`);
-    return prepare(await Users.findOne({'login': name}))
+    const Users = db.collection('users');
+    return prepare(await Users.findOne({'login': name}));
 }
 
 const isAuthenticated = rule({cache: 'contextual'})(

@@ -1,29 +1,29 @@
 export const typeDefs = `
       type Query {
-         user(_id: String, blog_id: Int): User
-         users(filter: UserFilter, skip: Int, first: Int, blog_id: Int): [User]
-         tag(_id: String, blog_id: Int): Taxonomy
-         tags(filter: TagFilter, skip: Int, first: Int, blog_id: Int): [Taxonomy]
-         taxonomy(_id: String, blog_id: Int): Taxonomy
-         taxonomies(filter: TagFilter, skip: Int, first: Int, blog_id: Int): [Taxonomy]
-         revision(postId: Int, blog_id: Int): Post
-         revisions(skip: Int, first: Int, blog_id: Int): [Post]
-         category(_id: String, blog_id: Int): Taxonomy
-         categories(filter: CategoryFilter, skip: Int, first: Int, blog_id: Int): [Taxonomy]
-         post(_id: String, blog_id: Int): Post
-         posts(filter: PostFilter, skip: Int, first: Int, blog_id: Int): [Post]
-         postsAggregate(first: Int, skip: Int, filter: PostFilter, blog_id: Int): [Post]
-         postsAggregateById(id: Int, blog_id: Int): Post
-         postContent(content: String, blog_id: Int): [Post]
-         postType(type: String, blog_id: Int): [Post]
-         blocksQuery(blockName: String, blog_id: Int): [Block]
-         blockId(id: String, blog_id: Int): Block
-         purpleIssues(blog_id: Int, , skip: Int, first: Int): [Post]
-         postById(id: Int, blog_id: Int): Post
-         postByParent(id: Int, blog_id: Int): [Post]
-         menusAggregate(first: Int, skip: Int, blog_id: Int): [Menu]
-         advancedCustomField(_id: String, blog_id: Int): ACFGroup
-         advancedCustomFields(filter: AdvancedCustomFieldFilter, skip: Int, first: Int, blog_id: Int): [ACFGroup]
+         user(_id: String): User
+         users(filter: UserFilter, skip: Int, first: Int): [User]
+         tag(_id: String): Taxonomy
+         tags(filter: TagFilter, skip: Int, first: Int): [Taxonomy]
+         taxonomy(_id: String): Taxonomy
+         taxonomies(filter: TagFilter, skip: Int, first: Int): [Taxonomy]
+         revision(postId: String): Post
+         revisions(skip: Int, first: Int): [Post]
+         category(_id: String): Taxonomy
+         categories(filter: CategoryFilter, skip: Int, first: Int): [Taxonomy]
+         post(_id: String): Post
+         posts(filter: PostFilter, skip: Int, first: Int): [Post]
+         postsAggregate(first: Int, skip: Int, filter: PostFilter): [Post]
+         postsAggregateById(id: String): Post
+         postContent(content: String): [Post]
+         postType(type: String): [Post]
+         blocksQuery(blockName: String): [Block]
+         blockId(id: String): Block
+         purpleIssues(skip: Int, first: Int): [Post]
+         postById(id: Int): Post
+         postByParent(id: Int): [Post]
+         menusAggregate(first: Int, skip: Int): [Menu]
+         advancedCustomField(_id: String): ACFGroup
+         advancedCustomFields(filter: AdvancedCustomFieldFilter, skip: Int, first: Int): [ACFGroup]
       }
       
       input PostFilter {
@@ -59,8 +59,9 @@ export const typeDefs = `
       type Post {
         _id: String
         post_id: Int
-        author: Int
-        categories: [Int]
+        source_post_id: String
+        author: String
+        categories: [String]
         comment_status: String
         guid: String
         post_modified: String
@@ -86,7 +87,27 @@ export const typeDefs = `
         comment_fields: [Comment]
         advancedCustomFields: [AdvancedCustomField]
         advanced_custom_fields: [AdvancedCustomField]
-        taxonomies: [Taxonomy]
+        taxonomies: [Taxonomy],
+        source_id: Int,
+        source_title: String,
+        source_href: String,
+        uagb_featured_image_src: ImageSource
+      }
+      
+      type ImageSource {
+        full: [String]
+        thumbnail: [String]
+        medium: [String]
+        medium_large: [String]
+        large: [String]
+        awb_sm: [String]
+        awb_md: [String]
+        awb_lg: [String]
+        awb_xl: [String]
+        abBlockPostGridLandscape: [String]
+        abBlockPostGridSquare: [String]
+        postThumbnail: [String]
+        twentytwentyFullscreen: [String]
       }
       
       type AdvancedCustomFieldWithValue {
@@ -97,6 +118,7 @@ export const typeDefs = `
       
       type AdvancedCustomField {
         ID: Int,
+        source_acf_id: String
         _name: String,
         _valid: Int,
         append: String,
@@ -122,6 +144,7 @@ export const typeDefs = `
       
       type ACFGroup {
         ID: Int,
+        source_acf_id: String
         _valid: Boolean,
         active: Boolean,
         description: String,
@@ -156,6 +179,7 @@ export const typeDefs = `
       
       type Comment {
         comment_id: Int
+        source_comment_id: String
         author: Int
         comment_date: String
         text: String
@@ -165,6 +189,7 @@ export const typeDefs = `
       
       type User {
         user_id: Int
+        source_user_id: String
         login: String
         display_name: String
         email: String
@@ -180,6 +205,7 @@ export const typeDefs = `
       
       type Menu {
         menu_id: Int
+        source_menu_id: String
         name: String
         slug: String
         menu_items: [MenuItem]
@@ -187,6 +213,7 @@ export const typeDefs = `
       
       type MenuItem {
         ID: Int
+        source_menu_items_id: String
         attr_title: String
         classes: [String]
         comment_count: String
@@ -238,6 +265,7 @@ export const typeDefs = `
        type Taxonomy {
         _id: String
         term_id: Int
+        source_term_id: String
         name: String
         slug: String
         description: String
@@ -247,6 +275,7 @@ export const typeDefs = `
         parent: Int
         term_group: Int
         term_taxonomy_id: Int
+        source_parent: String
       }
 
       schema {

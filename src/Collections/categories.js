@@ -4,13 +4,13 @@ import {buildCategoryFilters} from "../Filters/filters";
 
 export const category = async (root, {_id, blog_id}, {db}) => {
     const database = await db;
-    const Categories = database.collection(`taxonomies_${blog_id}`);
+    const Categories = database.collection(`taxonomies`);
     return prepare(await Categories.findOne(ObjectId(_id)))
 }
 
 export const categories = async (root, {filter, first, skip, blog_id}, {db}) => {
     const database = await db;
-    const Categories = database.collection(`taxonomies_${blog_id}`);
+    const Categories = database.collection(`taxonomies`);
     let query = filter ? {$or: buildCategoryFilters(filter)} : {};
     const tags = await Categories.find(query);
     if (first) {

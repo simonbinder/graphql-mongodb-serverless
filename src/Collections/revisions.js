@@ -1,14 +1,14 @@
 import {prepare} from "../../util";
 
-export const revision = async (root, {postId, blog_id}, {db}) => {
+export const revision = async (root, {postId}, {db}) => {
     const database = await db;
-    const Revisions = database.collection(`revisions_${blog_id}`);
-    return prepare(await Revisions.findOne({post_id: postId}))
+    const Revisions = database.collection(`revisions`);
+    return prepare(await Revisions.findOne({source_post_id: postId}))
 }
 
-export const revisions = async (root, {first, skip, blog_id}, {db}) => {
+export const revisions = async (root, {first, skip}, {db}) => {
     const database = await db;
-    const Revisions = database.collection(`revisions_${blog_id}`);
+    const Revisions = database.collection(`revisions`);
     const revisions = await Revisions.find({});
     if (first) {
         revisions.limit(first);
