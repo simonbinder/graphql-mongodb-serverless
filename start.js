@@ -115,13 +115,15 @@ const getDb = async () => {
         // Cold start or connection timed out. Create new connection.
         try {
             await client.connect();
-            return client.db('wp_' +  process.env.STAGE);
+            /*return client.db('wp_' +  process.env.STAGE);*/
+            return client.db('wp_dev');
         } catch (e) {
             return e;
         }
     } else {
         console.log("reuse connection");
-        return client.db('wp_' +  process.env.STAGE);
+       /* return client.db('wp_' +  process.env.STAGE);*/
+        return client.db('wp_dev');
     }
 }
 

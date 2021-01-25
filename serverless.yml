@@ -14,10 +14,11 @@ custom:
 provider:
   name: aws
   runtime: nodejs12.x
-  stage: ${opt:stage, 'dev'}
+  stage: dev
+  #stage: ${opt:stage, 'dev'}
   region: eu-central-1
-  environment:
-    STAGE: ${self:provider.stage}
+  #environment:
+   # STAGE: ${self:provider.stage}
 
 functions:
   purpledshub-graphql:
