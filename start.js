@@ -107,21 +107,21 @@ const getUser = async (request) => {
 const URL = `mongodb://${process.env.DOCUMENTDB_USER}:${process.env.DOCUMENTDB_PASSWORD}@${process.env.DOCUMENTDB_URL}:27017`;
 const localURL = 'mongodb://localhost:27017';
 const client = new MongoClient(URL, { useNewUrlParser: true, ssl: true, sslCA: caBundle, useUnifiedTopology: true });
-
-/*const client = new MongoClient(localURL);*/
+/*
+const client = new MongoClient(localURL);*/
 
 const getDb = async () => {
     if (!client.isConnected()) {
         // Cold start or connection timed out. Create new connection.
         try {
             await client.connect();
-            return client.db('wp');
+            return client.db('wp_' +  process.env.STAGE);
         } catch (e) {
             return e;
         }
     } else {
         console.log("reuse connection");
-        return client.db('wp');
+        return client.db('wp_' +  process.env.STAGE);
     }
 }
 
