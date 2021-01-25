@@ -11,4 +11,4 @@ production:
     - npm install
     - npm install -g serverless
   script:
-    - serverless deploy --stage dev --verbose
+    - serverless deploy --verbose
