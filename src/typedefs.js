@@ -94,7 +94,7 @@ export const typeDefs = `
         source_title: String,
         source_href: String,
         uagb_featured_image_src: ImageSource,
-        content_html: String
+        post_content_html: String
       }
       
       type ImageSource {
