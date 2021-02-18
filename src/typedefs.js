@@ -88,12 +88,13 @@ export const typeDefs = `
         comments: [Int]
         comment_fields: [Comment]
         advancedCustomFields: [AdvancedCustomField]
-        advanced_custom_fields: [AdvancedCustomField]
+        advanced_custom_fields: [AdvancedCustomFieldWithValue]
         taxonomies: [Taxonomy],
         source_id: Int,
         source_title: String,
         source_href: String,
-        uagb_featured_image_src: ImageSource
+        uagb_featured_image_src: ImageSource,
+        content_html: String
       }
       
       type ImageSource {
@@ -113,7 +114,7 @@ export const typeDefs = `
       }
       
       type AdvancedCustomFieldWithValue {
-        fieldId: Int
+        fieldId: String
         field: AdvancedCustomField
         value: String
       }
