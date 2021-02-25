@@ -74,7 +74,7 @@ export const typeDefs = `
         post_title: String
         post_type: String
         comment_count: String
-        thumbnail: String
+        post_image_url: String
         permalink: String
         post_excerpt: String
         post_content: [Block]
@@ -94,7 +94,8 @@ export const typeDefs = `
         source_title: String,
         source_href: String,
         uagb_featured_image_src: ImageSource,
-        post_content_html: String
+        post_content_html: String,
+        post_published: String,
       }
       
       type ImageSource {
