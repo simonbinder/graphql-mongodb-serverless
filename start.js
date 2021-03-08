@@ -112,6 +112,7 @@ const client = new MongoClient(localURL);*/
 
 const getDb = async () => {
     if (!client.isConnected()) {
+        console.log("create new connection");
         // Cold start or connection timed out. Create new connection.
         try {
             await client.connect();
