@@ -29,7 +29,7 @@ functions:
           method: post
           cors: true
  # playground:
- #   handler: ./src/start.handler
+ #   handler: start.handler
   #  events:
   #    - http:
    #       path: playground
