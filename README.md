@@ -1,6 +1,6 @@
 # GraphQL-DocumentDB-Serverless
 
-
+This a serverless application that can be deployed to Amazon Web Services. It creates a Lambda function that provides GraphQL-endpoints to query WordPress data from a DocumentDB database. 
 
 Install and deploy to Amazon Web Services:
 
@@ -23,3 +23,6 @@ sls offline start --allowCache
 ```
 
 The URL for local MongoDB can be changed in the start.js file. 
+
+## Docs
+The documentation for all available GraphQL queries can be found by opening the `index.html` file in the `doc/schema` folder.
