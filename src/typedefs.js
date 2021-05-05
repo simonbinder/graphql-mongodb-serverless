@@ -33,6 +33,7 @@ export const typeDefs = `
           date_start: String
           date_end: String
           post_content_contains: String
+          app_published: Boolean
         }
         
         input TagFilter {
@@ -93,25 +94,19 @@ export const typeDefs = `
         source_id: Int,
         source_title: String,
         source_href: String,
-        uagb_featured_image_src: ImageSource,
+        featured_image: String,
         post_content_html: String,
         post_published: String,
+        purple_issue_id: String,
+        purple_issue_title: String,
+        target: Target,
+        access_level: String
       }
       
-      type ImageSource {
-        full: [String]
-        thumbnail: [String]
-        medium: [String]
-        medium_large: [String]
-        large: [String]
-        awb_sm: [String]
-        awb_md: [String]
-        awb_lg: [String]
-        awb_xl: [String]
-        abBlockPostGridLandscape: [String]
-        abBlockPostGridSquare: [String]
-        postThumbnail: [String]
-        twentytwentyFullscreen: [String]
+      type Target {
+        publication_id: String,
+        app_id: String,
+        issue_id: String,
       }
       
       type AdvancedCustomFieldWithValue {

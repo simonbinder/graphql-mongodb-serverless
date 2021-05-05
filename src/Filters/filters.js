@@ -1,5 +1,5 @@
-export function buildFilters({AND = [], title_contains, post_type_contains, post_content_contains, date_start, date_end}) {
-    const filter = (title_contains || post_type_contains || post_content_contains || date_start || date_end) ? {} : null;
+export function buildFilters({AND = [], title_contains, post_type_contains, post_content_contains, date_start, date_end, app_published}) {
+    const filter = (title_contains || post_type_contains || post_content_contains || date_start || date_end || app_published) ? {} : null;
     if (title_contains) {
         filter.post_title = {$regex: `.*${title_contains}.*`};
     }
@@ -23,6 +23,12 @@ export function buildFilters({AND = [], title_contains, post_type_contains, post
     } else if (date_end) {
         filter.post_modified = {
             $lte: date_end
+        }
+    }
+
+    if (app_published) {
+        filter['target.issue_id'] = {
+            "$exists" : true, "$ne" : ""
         }
     }
 
