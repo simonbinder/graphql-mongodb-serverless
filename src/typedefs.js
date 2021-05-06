@@ -19,7 +19,7 @@ export const typeDefs = `
          blocksQuery(blockName: String): [Block]
          blockId(id: String): Block
          purpleIssues(skip: Int, first: Int): [Post]
-         postById(id: Int): Post
+         postById(id: String): Post
          postByParent(id: Int): [Post]
          menusAggregate(first: Int, skip: Int): [Menu]
          advancedCustomField(_id: String): ACFGroup
@@ -101,7 +101,8 @@ export const typeDefs = `
         purple_manager_issue_id: String,
         purple_issue_title: String,
         target: Target,
-        access_level: String
+        access_level: String,
+        deleted: Boolean
       }
       
       type Target {
