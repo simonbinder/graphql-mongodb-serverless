@@ -98,6 +98,7 @@ export const typeDefs = `
         post_content_html: String,
         post_published: String,
         purple_issue_id: String,
+        purple_manager_issue_id: String,
         purple_issue_title: String,
         target: Target,
         access_level: String
