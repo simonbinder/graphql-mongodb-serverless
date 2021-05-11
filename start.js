@@ -91,7 +91,7 @@ const isUserAuthenticated = async (request) => {
     const b64auth = (request.headers.authorization || '').split(' ')[1] || ''
     const [login, password] = Buffer.from(b64auth, 'base64').toString().split(':')
     if (login) {
-        const user = await getUserByName(login);
+        const user = await getUserByName(login, request);
         return CheckPassword(password, user.password);
     } else return false;
 }
@@ -100,34 +100,33 @@ const getUser = async (request) => {
     const b64auth = (request.headers.authorization || '').split(' ')[1] || ''
     const [login, password] = Buffer.from(b64auth, 'base64').toString().split(':')
     if (login) {
-        return await getUserByName(login);
+        return await getUserByName(login, request);
     } else return null;
 }
 
 const URL = `mongodb://${process.env.DOCUMENTDB_USER}:${process.env.DOCUMENTDB_PASSWORD}@${process.env.DOCUMENTDB_URL}:27017`;
 const localURL = 'mongodb://localhost:27017';
 const client = new MongoClient(URL, { useNewUrlParser: true, ssl: true, sslCA: caBundle, useUnifiedTopology: true });
-/*
-const client = new MongoClient(localURL);*/
+/*const client = new MongoClient(localURL);*/
 
-const getDb = async () => {
+const getDb = async (req) => {
     if (!client.isConnected()) {
         console.log("create new connection");
         // Cold start or connection timed out. Create new connection.
         try {
             await client.connect();
-            return client.db('wp_' +  process.env.STAGE);
+            return client.db('wp_' +  req.headers['x-database']);
         } catch (e) {
             return e;
         }
     } else {
         console.log("reuse connection");
-        return client.db('wp_' +  process.env.STAGE);
+        return client.db('wp_' +  req.headers['x-database']);
     }
 }
 
-const getUserByName = async (name) => {
-    const db = await getDb();
+const getUserByName = async (name, request) => {
+    const db = await getDb(request);
     const Users = db.collection('users');
     return prepare(await Users.findOne({'login': name}));
 }
@@ -210,7 +209,7 @@ class DeduplicateResponseExtension extends GraphQLExtension {
 const server = new ApolloServer({
     schema,
     context: ({req}) => ({
-        isUserAuthenticated: isUserAuthenticated(req), user: getUser(req), db: getDb()
+        isUserAuthenticated: isUserAuthenticated(req), user: getUser(req), db: getDb(req)
     }),
     plugins: [responseCachePlugin()],
     extensions: [() => new DeduplicateResponseExtension()],
