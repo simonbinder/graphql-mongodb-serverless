@@ -24,10 +24,10 @@ import {revision, revisions} from "./src/Collections/revisions";
 import {allow, and, deny, rule, shield} from "graphql-shield";
 import {prepare} from "./util";
 import {CheckPassword} from "wordpress-hash-node";
-import { makeExecutableSchema, gql } from "apollo-server";
+import {makeExecutableSchema, gql} from "apollo-server";
 import {applyMiddleware} from "graphql-middleware";
 import serverless from "serverless-http";
-import { ApolloServer } from "apollo-server-express";
+import {ApolloServer} from "apollo-server-express";
 import caBundle from "./rds-combined-ca-bundle.pem";
 import * as context from "serverless";
 import deflate from "graphql-deduplicator/dist/deflate";
@@ -104,9 +104,14 @@ const getUser = async (request) => {
     } else return null;
 }
 
-const URL = `mongodb://${process.env.DOCUMENTDB_USER}:${process.env.DOCUMENTDB_PASSWORD}@${process.env.DOCUMENTDB_URL}:27017`;
+let URL = '';
+if (process.env.STAGE === "prod") {
+    URL = `mongodb://${process.env.DOCUMENTDB_USER_PROD}:${process.env.DOCUMENTDB_PASSWORD_PROD}@${process.env.DOCUMENTDB_URL_PROD}:27017`;
+} else {
+    URL = `mongodb://${process.env.DOCUMENTDB_USER}:${process.env.DOCUMENTDB_PASSWORD}@${process.env.DOCUMENTDB_URL}:27017`;
+}
 const localURL = 'mongodb://localhost:27017';
-const client = new MongoClient(URL, { useNewUrlParser: true, ssl: true, sslCA: caBundle, useUnifiedTopology: true });
+const client = new MongoClient(URL, {useNewUrlParser: true, ssl: true, sslCA: caBundle, useUnifiedTopology: true});
 /*const client = new MongoClient(localURL);*/
 
 const getDb = async (req) => {
@@ -115,13 +120,13 @@ const getDb = async (req) => {
         // Cold start or connection timed out. Create new connection.
         try {
             await client.connect();
-            return client.db('wp_' +  req.headers['x-database']);
+            return client.db('wp_' + req.headers['x-database']);
         } catch (e) {
             return e;
         }
     } else {
         console.log("reuse connection");
-        return client.db('wp_' +  req.headers['x-database']);
+        return client.db('wp_' + req.headers['x-database']);
     }
 }
 
@@ -194,7 +199,7 @@ context.callbackWaitsForEmptyEventLoop = false;
 
 class DeduplicateResponseExtension extends GraphQLExtension {
     willSendResponse(o) {
-        const { context, graphqlResponse } = o
+        const {context, graphqlResponse} = o
         const data = deflate(graphqlResponse.data)
         return {
             ...o,
