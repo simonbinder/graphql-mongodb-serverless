@@ -34,7 +34,7 @@ export const posts = async (root, {filter, first, skip}, ctx, info) => {
     let query = filter ? {$and: buildFilters(filter)} : {};
     const isAuthenticated = await ctx.isUserAuthenticated;
     if (!isAuthenticated) {
-        Object.assign(query['$or'][0], {post_status: {$regex: `.*publish.*`}});
+        Object.assign(query['$and'][0], {post_status: {$regex: `.*publish.*`}});
     }
     const posts = await Posts.find(query).limit(first);
     if(skip) {
