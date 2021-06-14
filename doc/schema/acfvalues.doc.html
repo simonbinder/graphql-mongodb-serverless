@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link type="text/css" rel="stylesheet" href="./styles/graphdoc.css" />
-    <title>ImageSource</title>
+    <title>acfValues</title>
     <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700" rel="stylesheet"><link type="text/css" rel="stylesheet" href="./assets/code.css" /><link type="text/css" rel="stylesheet" href="./assets/require-by.css" />
 </head>
 <body class="slds-scrollable--y">
@@ -75,14 +75,14 @@
                 ACFGroup
             </a>
         </li>
+        <li class="slds-is-active" title="acfValues">
+            <a href="acfvalues.doc.html" class="slds-navigation-list--vertical__action slds-text-link--reset slds-truncate">
+                acfValues
+            </a>
+        </li>
         <li  title="AdvancedCustomField">
             <a href="advancedcustomfield.doc.html" class="slds-navigation-list--vertical__action slds-text-link--reset slds-truncate">
                 AdvancedCustomField
-            </a>
-        </li>
-        <li  title="AdvancedCustomFieldWithValue">
-            <a href="advancedcustomfieldwithvalue.doc.html" class="slds-navigation-list--vertical__action slds-text-link--reset slds-truncate">
-                AdvancedCustomFieldWithValue
             </a>
         </li>
         <li  title="Attr">
@@ -105,11 +105,6 @@
                 CustomField
             </a>
         </li>
-        <li class="slds-is-active" title="ImageSource">
-            <a href="imagesource.doc.html" class="slds-navigation-list--vertical__action slds-text-link--reset slds-truncate">
-                ImageSource
-            </a>
-        </li>
         <li  title="Location">
             <a href="location.doc.html" class="slds-navigation-list--vertical__action slds-text-link--reset slds-truncate">
                 Location
@@ -128,6 +123,16 @@
         <li  title="Post">
             <a href="post.doc.html" class="slds-navigation-list--vertical__action slds-text-link--reset slds-truncate">
                 Post
+            </a>
+        </li>
+        <li  title="PostAggregate">
+            <a href="postaggregate.doc.html" class="slds-navigation-list--vertical__action slds-text-link--reset slds-truncate">
+                PostAggregate
+            </a>
+        </li>
+        <li  title="Target">
+            <a href="target.doc.html" class="slds-navigation-list--vertical__action slds-text-link--reset slds-truncate">
+                Target
             </a>
         </li>
         <li  title="Taxonomy">
@@ -246,7 +251,7 @@
     </div>
     <div class="container">
         <p class="slds-text-title--caps slds-text-color--weak">OBJECT</p>
-        <h1 class="slds-text-heading--large">ImageSource</h1>
+        <h1 class="slds-text-heading--large">acfValues</h1>
         <div class="slds-text-body--regular"></div>
     </div>
 </section>
@@ -258,7 +263,7 @@
             </a>
             GraphQL Schema definition
         </h2>
-        <code class="highlight"><ul class="code" style="padding-left:42px"><li><span class="keyword operator ts">type</span> <span class="identifier">ImageSource</span> {</li><li></li><li><span class="tab"><span class="meta">full</span>: [<a class="support type" href="string.doc.html">String</a>] </span></li><li></li><li><span class="tab"><span class="meta">thumbnail</span>: [<a class="support type" href="string.doc.html">String</a>] </span></li><li></li><li><span class="tab"><span class="meta">medium</span>: [<a class="support type" href="string.doc.html">String</a>] </span></li><li></li><li><span class="tab"><span class="meta">medium_large</span>: [<a class="support type" href="string.doc.html">String</a>] </span></li><li></li><li><span class="tab"><span class="meta">large</span>: [<a class="support type" href="string.doc.html">String</a>] </span></li><li></li><li><span class="tab"><span class="meta">awb_sm</span>: [<a class="support type" href="string.doc.html">String</a>] </span></li><li></li><li><span class="tab"><span class="meta">awb_md</span>: [<a class="support type" href="string.doc.html">String</a>] </span></li><li></li><li><span class="tab"><span class="meta">awb_lg</span>: [<a class="support type" href="string.doc.html">String</a>] </span></li><li></li><li><span class="tab"><span class="meta">awb_xl</span>: [<a class="support type" href="string.doc.html">String</a>] </span></li><li></li><li><span class="tab"><span class="meta">abBlockPostGridLandscape</span>: [<a class="support type" href="string.doc.html">String</a>] </span></li><li></li><li><span class="tab"><span class="meta">abBlockPostGridSquare</span>: [<a class="support type" href="string.doc.html">String</a>] </span></li><li></li><li><span class="tab"><span class="meta">postThumbnail</span>: [<a class="support type" href="string.doc.html">String</a>] </span></li><li></li><li><span class="tab"><span class="meta">twentytwentyFullscreen</span>: [<a class="support type" href="string.doc.html">String</a>] </span></li><li>}</li></ul></code>
+        <code class="highlight"><ul class="code" style="padding-left:28px"><li><span class="keyword operator ts">type</span> <span class="identifier">acfValues</span> {</li><li></li><li><span class="tab"><span class="meta">fieldId</span>: <a class="support type" href="string.doc.html">String</a> </span></li><li></li><li><span class="tab"><span class="meta">field</span>: <a class="support type" href="advancedcustomfield.doc.html">AdvancedCustomField</a> </span></li><li></li><li><span class="tab"><span class="meta">value</span>: <a class="support type" href="string.doc.html">String</a> </span></li><li>}</li></ul></code>
     </div>
 </section>
 <section>
@@ -269,7 +274,7 @@
             </a>
             Require by
         </h2>
-        <ul class="require-by"><li><a href="post.doc.html" title="Post - ">Post<em>null</em></a><li></ul>
+        <ul class="require-by"><li><a href="postaggregate.doc.html" title="PostAggregate - ">PostAggregate<em>null</em></a><li></ul>
     </div>
 </section>
 <footer>

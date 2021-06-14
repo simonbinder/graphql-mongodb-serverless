@@ -12,8 +12,8 @@ export const typeDefs = `
          categories(filter: CategoryFilter, skip: Int, first: Int): [Taxonomy]
          post(_id: String): Post
          posts(filter: PostFilter, skip: Int, first: Int): [Post]
-         postsAggregate(first: Int, skip: Int, filter: PostFilter): [Post]
-         postsAggregateById(id: String): Post
+         postsAggregate(first: Int, skip: Int, filter: PostFilter): [PostAggregate]
+         postsAggregateById(id: String): PostAggregate
          postContent(content: String): [Post]
          postType(type: String): [Post]
          blocksQuery(blockName: String): [Block]
@@ -58,14 +58,58 @@ export const typeDefs = `
           email_contains: String
           login_contains: String
         }
+        
+        type PostAggregate {
+            _id: String
+            post_id: Int
+            source_post_id: String
+            comment_status: String
+            guid: String
+            post_modified: String
+            post_modified_gmt: String
+            post_name: String
+            post_parent: Int
+            post_status: String
+            post_title: String
+            post_type: String
+            comment_count: String
+            post_image_url: String
+            permalink: String
+            post_excerpt: String
+            post_content: [Block]
+            user: User
+            purple_issue: Int
+            purple_issue_articles: [Int]
+            issue_posts: [Post]
+            comments: [Int]
+            comment_fields: [Comment]
+            advancedCustomFields: [AdvancedCustomField]
+            acfValues: [acfValues]
+            taxonomies: [Taxonomy],
+            categories: [Taxonomy],
+            tags: [Taxonomy],
+            source_id: Int,
+            source_title: String,
+            source_href: String,
+            featured_image: String,
+            post_content_html: String,
+            post_published: String,
+            purple_issue_id: String,
+            purple_manager_issue_id: String,
+            purple_issue_title: String,
+             custom_fields: [CustomField]
+            target: Target,
+            access_level: String,
+            deleted: Boolean
+        }
 
       type Post {
         _id: String
         post_id: Int
         source_post_id: String
         author: String
-        categories: [String]
         comment_status: String
+        categories: [String]
         guid: String
         post_modified: String
         post_modified_gmt: String
@@ -79,18 +123,11 @@ export const typeDefs = `
         permalink: String
         post_excerpt: String
         post_content: [Block]
-        tags: [Taxonomy]
-        cats: [Taxonomy]
-        user: User
+        taxonomies: [String]
         custom_fields: [CustomField]
         purple_issue: Int
         purple_issue_articles: [Int]
-        issue_posts: [Post]
         comments: [Int]
-        comment_fields: [Comment]
-        advancedCustomFields: [AdvancedCustomField]
-        advanced_custom_fields: [AdvancedCustomFieldWithValue]
-        taxonomies: [Taxonomy],
         source_id: Int,
         source_title: String,
         source_href: String,
@@ -111,7 +148,7 @@ export const typeDefs = `
         issue_id: String,
       }
       
-      type AdvancedCustomFieldWithValue {
+      type acfValues {
         fieldId: String
         field: AdvancedCustomField
         value: String

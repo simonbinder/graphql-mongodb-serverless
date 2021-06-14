@@ -59,7 +59,7 @@ export const postsAggregate = async (root, {first, skip}, {db}) => {
                 from: `taxonomies`,
                 localField: 'categories',
                 foreignField: 'source_term_id',
-                as: 'cats'
+                as: 'categories'
             }
         }, {
             $lookup: {
@@ -87,7 +87,7 @@ export const postsAggregate = async (root, {first, skip}, {db}) => {
                 from: `advanced_custom_fields`,
                 localField: 'advanced_custom_fields.fieldId',
                 foreignField: 'source_acf_id',
-                as: 'advancedCustomFields'
+                as: 'acfValues'
             }
         }, {
             $unwind: '$user'

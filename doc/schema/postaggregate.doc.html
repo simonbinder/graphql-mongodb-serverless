@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link type="text/css" rel="stylesheet" href="./styles/graphdoc.css" />
-    <title>Taxonomy</title>
+    <title>PostAggregate</title>
     <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700" rel="stylesheet"><link type="text/css" rel="stylesheet" href="./assets/code.css" /><link type="text/css" rel="stylesheet" href="./assets/require-by.css" />
 </head>
 <body class="slds-scrollable--y">
@@ -125,7 +125,7 @@
                 Post
             </a>
         </li>
-        <li  title="PostAggregate">
+        <li class="slds-is-active" title="PostAggregate">
             <a href="postaggregate.doc.html" class="slds-navigation-list--vertical__action slds-text-link--reset slds-truncate">
                 PostAggregate
             </a>
@@ -135,7 +135,7 @@
                 Target
             </a>
         </li>
-        <li class="slds-is-active" title="Taxonomy">
+        <li  title="Taxonomy">
             <a href="taxonomy.doc.html" class="slds-navigation-list--vertical__action slds-text-link--reset slds-truncate">
                 Taxonomy
             </a>
@@ -251,7 +251,7 @@
     </div>
     <div class="container">
         <p class="slds-text-title--caps slds-text-color--weak">OBJECT</p>
-        <h1 class="slds-text-heading--large">Taxonomy</h1>
+        <h1 class="slds-text-heading--large">PostAggregate</h1>
         <div class="slds-text-body--regular"></div>
     </div>
 </section>
@@ -263,7 +263,7 @@
             </a>
             GraphQL Schema definition
         </h2>
-        <code class="highlight"><ul class="code" style="padding-left:42px"><li><span class="keyword operator ts">type</span> <span class="identifier">Taxonomy</span> {</li><li></li><li><span class="tab"><span class="meta">_id</span>: <a class="support type" href="string.doc.html">String</a> </span></li><li></li><li><span class="tab"><span class="meta">term_id</span>: <a class="support type" href="int.doc.html">Int</a> </span></li><li></li><li><span class="tab"><span class="meta">source_term_id</span>: <a class="support type" href="string.doc.html">String</a> </span></li><li></li><li><span class="tab"><span class="meta">name</span>: <a class="support type" href="string.doc.html">String</a> </span></li><li></li><li><span class="tab"><span class="meta">slug</span>: <a class="support type" href="string.doc.html">String</a> </span></li><li></li><li><span class="tab"><span class="meta">description</span>: <a class="support type" href="string.doc.html">String</a> </span></li><li></li><li><span class="tab"><span class="meta">taxonomy</span>: <a class="support type" href="string.doc.html">String</a> </span></li><li></li><li><span class="tab"><span class="meta">count</span>: <a class="support type" href="int.doc.html">Int</a> </span></li><li></li><li><span class="tab"><span class="meta">filter</span>: <a class="support type" href="string.doc.html">String</a> </span></li><li></li><li><span class="tab"><span class="meta">parent</span>: <a class="support type" href="int.doc.html">Int</a> </span></li><li></li><li><span class="tab"><span class="meta">term_group</span>: <a class="support type" href="int.doc.html">Int</a> </span></li><li></li><li><span class="tab"><span class="meta">term_taxonomy_id</span>: <a class="support type" href="int.doc.html">Int</a> </span></li><li></li><li><span class="tab"><span class="meta">source_parent</span>: <a class="support type" href="string.doc.html">String</a> </span></li><li>}</li></ul></code>
+        <code class="highlight"><ul class="code" style="padding-left:42px"><li><span class="keyword operator ts">type</span> <span class="identifier">PostAggregate</span> {</li><li></li><li><span class="tab"><span class="meta">_id</span>: <a class="support type" href="string.doc.html">String</a> </span></li><li></li><li><span class="tab"><span class="meta">post_id</span>: <a class="support type" href="int.doc.html">Int</a> </span></li><li></li><li><span class="tab"><span class="meta">source_post_id</span>: <a class="support type" href="string.doc.html">String</a> </span></li><li></li><li><span class="tab"><span class="meta">comment_status</span>: <a class="support type" href="string.doc.html">String</a> </span></li><li></li><li><span class="tab"><span class="meta">guid</span>: <a class="support type" href="string.doc.html">String</a> </span></li><li></li><li><span class="tab"><span class="meta">post_modified</span>: <a class="support type" href="string.doc.html">String</a> </span></li><li></li><li><span class="tab"><span class="meta">post_modified_gmt</span>: <a class="support type" href="string.doc.html">String</a> </span></li><li></li><li><span class="tab"><span class="meta">post_name</span>: <a class="support type" href="string.doc.html">String</a> </span></li><li></li><li><span class="tab"><span class="meta">post_parent</span>: <a class="support type" href="int.doc.html">Int</a> </span></li><li></li><li><span class="tab"><span class="meta">post_status</span>: <a class="support type" href="string.doc.html">String</a> </span></li><li></li><li><span class="tab"><span class="meta">post_title</span>: <a class="support type" href="string.doc.html">String</a> </span></li><li></li><li><span class="tab"><span class="meta">post_type</span>: <a class="support type" href="string.doc.html">String</a> </span></li><li></li><li><span class="tab"><span class="meta">comment_count</span>: <a class="support type" href="string.doc.html">String</a> </span></li><li></li><li><span class="tab"><span class="meta">post_image_url</span>: <a class="support type" href="string.doc.html">String</a> </span></li><li></li><li><span class="tab"><span class="meta">permalink</span>: <a class="support type" href="string.doc.html">String</a> </span></li><li></li><li><span class="tab"><span class="meta">post_excerpt</span>: <a class="support type" href="string.doc.html">String</a> </span></li><li></li><li><span class="tab"><span class="meta">post_content</span>: [<a class="support type" href="block.doc.html">Block</a>] </span></li><li></li><li><span class="tab"><span class="meta">user</span>: <a class="support type" href="user.doc.html">User</a> </span></li><li></li><li><span class="tab"><span class="meta">purple_issue</span>: <a class="support type" href="int.doc.html">Int</a> </span></li><li></li><li><span class="tab"><span class="meta">purple_issue_articles</span>: [<a class="support type" href="int.doc.html">Int</a>] </span></li><li></li><li><span class="tab"><span class="meta">issue_posts</span>: [<a class="support type" href="post.doc.html">Post</a>] </span></li><li></li><li><span class="tab"><span class="meta">comments</span>: [<a class="support type" href="int.doc.html">Int</a>] </span></li><li></li><li><span class="tab"><span class="meta">comment_fields</span>: [<a class="support type" href="comment.doc.html">Comment</a>] </span></li><li></li><li><span class="tab"><span class="meta">advancedCustomFields</span>: [<a class="support type" href="advancedcustomfield.doc.html">AdvancedCustomField</a>] </span></li><li></li><li><span class="tab"><span class="meta">acfValues</span>: [<a class="support type" href="acfvalues.doc.html">acfValues</a>] </span></li><li></li><li><span class="tab"><span class="meta">taxonomies</span>: [<a class="support type" href="taxonomy.doc.html">Taxonomy</a>] </span></li><li></li><li><span class="tab"><span class="meta">categories</span>: [<a class="support type" href="taxonomy.doc.html">Taxonomy</a>] </span></li><li></li><li><span class="tab"><span class="meta">tags</span>: [<a class="support type" href="taxonomy.doc.html">Taxonomy</a>] </span></li><li></li><li><span class="tab"><span class="meta">source_id</span>: <a class="support type" href="int.doc.html">Int</a> </span></li><li></li><li><span class="tab"><span class="meta">source_title</span>: <a class="support type" href="string.doc.html">String</a> </span></li><li></li><li><span class="tab"><span class="meta">source_href</span>: <a class="support type" href="string.doc.html">String</a> </span></li><li></li><li><span class="tab"><span class="meta">featured_image</span>: <a class="support type" href="string.doc.html">String</a> </span></li><li></li><li><span class="tab"><span class="meta">post_content_html</span>: <a class="support type" href="string.doc.html">String</a> </span></li><li></li><li><span class="tab"><span class="meta">post_published</span>: <a class="support type" href="string.doc.html">String</a> </span></li><li></li><li><span class="tab"><span class="meta">purple_issue_id</span>: <a class="support type" href="string.doc.html">String</a> </span></li><li></li><li><span class="tab"><span class="meta">purple_manager_issue_id</span>: <a class="support type" href="string.doc.html">String</a> </span></li><li></li><li><span class="tab"><span class="meta">purple_issue_title</span>: <a class="support type" href="string.doc.html">String</a> </span></li><li></li><li><span class="tab"><span class="meta">custom_fields</span>: [<a class="support type" href="customfield.doc.html">CustomField</a>] </span></li><li></li><li><span class="tab"><span class="meta">target</span>: <a class="support type" href="target.doc.html">Target</a> </span></li><li></li><li><span class="tab"><span class="meta">access_level</span>: <a class="support type" href="string.doc.html">String</a> </span></li><li></li><li><span class="tab"><span class="meta">deleted</span>: <a class="support type" href="boolean.doc.html">Boolean</a> </span></li><li>}</li></ul></code>
     </div>
 </section>
 <section>
@@ -274,7 +274,7 @@
             </a>
             Require by
         </h2>
-        <ul class="require-by"><li><a href="postaggregate.doc.html" title="PostAggregate - ">PostAggregate<em>null</em></a><li><li><a href="query.doc.html" title="Query - ">Query<em>null</em></a><li></ul>
+        <ul class="require-by"><li><a href="query.doc.html" title="Query - ">Query<em>null</em></a><li></ul>
     </div>
 </section>
 <footer>
